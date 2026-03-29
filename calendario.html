@@ -24,6 +24,21 @@ h2 {
   margin-bottom: 20px;
 }
 
+.legend {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.legend span {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.8em;
+  color: white;
+}
+
 #calendar {
   background: white;
   padding: 20px;
@@ -43,8 +58,18 @@ h2 {
 <body>
 
 <div class="container">
-<h2>PhD Program in Structural and Geotechnical Engineering</h2>
-<div id="calendar"></div>
+  <h2>PhD Program in Structural and Geotechnical Engineering</h2>
+
+  <!-- LEGENDA -->
+  <div class="legend">
+    <span style="background:#2563eb;">Phase A</span>
+    <span style="background:#16a34a;">Mechanics of Solids and Structures</span>
+    <span style="background:#ea580c;">Structural Engineering</span>
+    <span style="background:#7c3aed;">Geotechnical Engineering</span>
+    <span style="background:#6b7280;">Seminars</span>
+  </div>
+
+  <div id="calendar"></div>
 </div>
 
 <script>
@@ -71,18 +96,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     events: [
 
-      // ===== Scientific Computing (Phase A) =====
-
+      // ===== Phase A =====
       { start:'2026-05-05T15:00:00', end:'2026-05-05T17:00:00' },
       { start:'2026-05-12T15:00:00', end:'2026-05-12T17:00:00' },
       { start:'2026-05-19T15:00:00', end:'2026-05-19T17:00:00' },
       { start:'2026-05-26T15:00:00', end:'2026-05-26T17:00:00' },
-
       { start:'2026-05-07T16:00:00', end:'2026-05-07T18:00:00' },
       { start:'2026-05-14T16:00:00', end:'2026-05-14T18:00:00' },
       { start:'2026-05-21T16:00:00', end:'2026-05-21T18:00:00' },
       { start:'2026-05-28T16:00:00', end:'2026-05-28T18:00:00' },
-
       { start:'2026-06-04T15:00:00', end:'2026-06-04T17:00:00' },
       { start:'2026-06-16T15:00:00', end:'2026-06-16T17:00:00' }
 
@@ -93,7 +115,8 @@ document.addEventListener('DOMContentLoaded', function() {
         extendedProps: {
           time: e.start.includes('T15') ? '15:00–17:00' : '16:00–18:00',
           location: 'Room 329',
-          lecturer: 'Alba Bisante'
+          lecturer: 'Alba Bisante',
+          group: 'A'
         }
     }))
 
