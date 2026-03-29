@@ -21,9 +21,33 @@
 
   h2 {
     text-align: center;
-    font-weight: 600;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     color: #1f2937;
+  }
+
+  .legend, .filters {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+
+  .legend span, .filters button {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.8em;
+  }
+
+  .filters button {
+    border: none;
+    cursor: pointer;
+    background: #e5e7eb;
+  }
+
+  .filters button.active {
+    background: #2563eb;
+    color: white;
   }
 
   #calendar {
@@ -33,33 +57,34 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
 
-  .fc-toolbar-title {
-    font-size: 1.4em;
-    font-weight: 600;
-  }
-
-  .fc-button {
-    background-color: #e5e7eb !important;
-    border: none !important;
-    color: #374151 !important;
-    border-radius: 6px !important;
-  }
-
-  .fc-button-active {
-    background-color: #2563eb !important;
-    color: white !important;
-  }
-
   .fc-event {
     border-radius: 8px;
     border: none;
-    padding: 4px;
-    font-size: 0.78em;
-    transition: transform 0.1s ease;
+    font-size: 0.75em;
   }
 
-  .fc-event:hover {
-    transform: scale(1.02);
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 1000;
+  }
+
+  .popup h3 {
+    margin-top: 0;
+  }
+
+  .popup-close {
+    cursor: pointer;
+    color: #2563eb;
+    margin-top: 10px;
+    display: inline-block;
   }
 </style>
 
@@ -69,44 +94,64 @@
 
 <div class="container">
   <h2>PhD Program in Structural and Geotechnical Engineering</h2>
+
+  <!-- FILTRI -->
+  <div class="filters">
+    <button onclick="filterEvents('all')" class="active">All</button>
+    <button onclick="filterEvents('A')">Fase A</button>
+    <button onclick="filterEvents('B')">Fase B</button>
+  </div>
+
+  <!-- LEGENDA -->
+  <div class="legend">
+    <span style="background:#2563eb;color:white;">Fase A</span>
+    <span style="background:#16a34a;color:white;">Scienza delle Costruzioni</span>
+    <span style="background:#ea580c;color:white;">Tecnica delle Costruzioni</span>
+    <span style="background:#7c3aed;color:white;">Geotecnica</span>
+  </div>
+
   <div id="calendar"></div>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+  <h3 id="popup-title"></h3>
+  <p id="popup-time"></p>
+  <p id="popup-location"></p>
+  <span class="popup-close" onclick="closePopup()">Close</span>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
+ let currentFilter = 'all';
+
  const calendar = new FullCalendar.Calendar(
   document.getElementById('calendar'),
   {
     initialView: 'dayGridMonth',
-    locale: 'en',
     height: 'auto',
 
     eventContent: function(arg) {
-
-      let title = arg.event.title;
-      let time = arg.event.extendedProps.time || '';
-      let location = arg.event.extendedProps.location || '';
-
       return {
         html: `
-          <div style="white-space: normal; line-height: 1.3;">
-            <div style="font-weight: 600; color: #111827;">
-              ${title}
-            </div>
-            <div style="font-size: 0.75em; color: #6b7280;">
-              ${time}
-            </div>
-            <div style="font-size: 0.75em; color: #9ca3af;">
-              ${location}
-            </div>
+          <div style="white-space: normal;">
+            <strong>${arg.event.title}</strong><br>
+            <span style="font-size:0.75em;">⏰ ${arg.event.extendedProps.time}</span><br>
+            <span style="font-size:0.75em;">📍 ${arg.event.extendedProps.location}</span>
           </div>
         `
       };
     },
 
-    events: [
+    eventClick: function(info) {
+      document.getElementById('popup-title').innerText = info.event.title;
+      document.getElementById('popup-time').innerText = "Time: " + info.event.extendedProps.time;
+      document.getElementById('popup-location').innerText = "Location: " + info.event.extendedProps.location;
+      document.getElementById('popup').style.display = 'block';
+    },
 
+    events: [
       {
         title: 'Scientific Computing and Python Programming',
         start: '2026-05-05T15:00:00',
@@ -114,40 +159,10 @@ document.addEventListener('DOMContentLoaded', function() {
         color: '#2563eb',
         extendedProps: {
           time: '15:00–17:00',
-          location: 'Room 329'
+          location: 'Room 329',
+          phase: 'A'
         }
       },
-      {
-        title: 'Scientific Computing and Python Programming',
-        start: '2026-05-12T15:00:00',
-        end: '2026-05-12T17:00:00',
-        color: '#2563eb',
-        extendedProps: {
-          time: '15:00–17:00',
-          location: 'Room 329'
-        }
-      },
-      {
-        title: 'Scientific Computing and Python Programming',
-        start: '2026-05-19T15:00:00',
-        end: '2026-05-19T17:00:00',
-        color: '#2563eb',
-        extendedProps: {
-          time: '15:00–17:00',
-          location: 'Room 329'
-        }
-      },
-      {
-        title: 'Scientific Computing and Python Programming',
-        start: '2026-05-26T15:00:00',
-        end: '2026-05-26T17:00:00',
-        color: '#2563eb',
-        extendedProps: {
-          time: '15:00–17:00',
-          location: 'Room 329'
-        }
-      },
-
       {
         title: 'Scientific Computing and Python Programming',
         start: '2026-05-07T16:00:00',
@@ -155,68 +170,36 @@ document.addEventListener('DOMContentLoaded', function() {
         color: '#2563eb',
         extendedProps: {
           time: '16:00–18:00',
-          location: 'Room 329'
-        }
-      },
-      {
-        title: 'Scientific Computing and Python Programming',
-        start: '2026-05-14T16:00:00',
-        end: '2026-05-14T18:00:00',
-        color: '#2563eb',
-        extendedProps: {
-          time: '16:00–18:00',
-          location: 'Room 329'
-        }
-      },
-      {
-        title: 'Scientific Computing and Python Programming',
-        start: '2026-05-21T16:00:00',
-        end: '2026-05-21T18:00:00',
-        color: '#2563eb',
-        extendedProps: {
-          time: '16:00–18:00',
-          location: 'Room 329'
-        }
-      },
-      {
-        title: 'Scientific Computing and Python Programming',
-        start: '2026-05-28T16:00:00',
-        end: '2026-05-28T18:00:00',
-        color: '#2563eb',
-        extendedProps: {
-          time: '16:00–18:00',
-          location: 'Room 329'
-        }
-      },
-
-      {
-        title: 'Scientific Computing and Python Programming',
-        start: '2026-06-04T15:00:00',
-        end: '2026-06-04T17:00:00',
-        color: '#2563eb',
-        extendedProps: {
-          time: '15:00–17:00',
-          location: 'Room 329'
-        }
-      },
-      {
-        title: 'Scientific Computing and Python Programming',
-        start: '2026-06-16T15:00:00',
-        end: '2026-06-16T17:00:00',
-        color: '#2563eb',
-        extendedProps: {
-          time: '15:00–17:00',
-          location: 'Room 329'
+          location: 'Room 329',
+          phase: 'A'
         }
       }
-
     ]
   }
 );
 
-  calendar.render();
+calendar.render();
+
+window.filterEvents = function(phase) {
+  currentFilter = phase;
+
+  document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  calendar.getEvents().forEach(event => {
+    if (phase === 'all' || event.extendedProps.phase === phase) {
+      event.setProp('display', 'auto');
+    } else {
+      event.setProp('display', 'none');
+    }
+  });
+}
 
 });
+
+function closePopup() {
+  document.getElementById('popup').style.display = 'none';
+}
 </script>
 
 </body>
