@@ -7,85 +7,72 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
 <style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    margin: 0;
-    background-color: #f4f6f8;
-  }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+}
 
-  .container {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 0 20px;
-  }
+.container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
 
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #1f2937;
-  }
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  .legend, .filters {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-  }
+.legend, .filters {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
 
-  .legend span, .filters button {
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-size: 0.8em;
-  }
+.legend span, .filters button {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.8em;
+}
 
-  .filters button {
-    border: none;
-    cursor: pointer;
-    background: #e5e7eb;
-  }
+.filters button {
+  border: none;
+  background: #e5e7eb;
+  cursor: pointer;
+}
 
-  .filters button.active {
-    background: #2563eb;
-    color: white;
-  }
+.filters button.active {
+  background: #2563eb;
+  color: white;
+}
 
-  #calendar {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
+#calendar {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
 
-  .fc-event {
-    border-radius: 8px;
-    border: none;
-    font-size: 0.75em;
-  }
+.fc-event {
+  border-radius: 8px;
+  border: none;
+  font-size: 0.75em;
+}
 
-  .popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    display: none;
-    z-index: 1000;
-  }
-
-  .popup h3 {
-    margin-top: 0;
-  }
-
-  .popup-close {
-    cursor: pointer;
-    color: #2563eb;
-    margin-top: 10px;
-    display: inline-block;
-  }
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  display: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
 </style>
 
 </head>
@@ -93,65 +80,66 @@
 <body>
 
 <div class="container">
-  <h2>PhD Program in Structural and Geotechnical Engineering</h2>
+<h2>PhD Program in Structural and Geotechnical Engineering</h2>
 
-  <!-- FILTRI -->
-  <div class="filters">
-    <button onclick="filterEvents('all')" class="active">All</button>
-    <button onclick="filterEvents('A')">Fase A</button>
-    <button onclick="filterEvents('B')">Fase B</button>
-  </div>
+<!-- FILTRI -->
+<div class="filters">
+  <button onclick="filterEvents('all')" class="active">All</button>
+  <button onclick="filterEvents('A')">Phase A</button>
+  <button onclick="filterEvents('B')">Phase B</button>
+  <button onclick="filterEvents('seminar')">Seminars</button>
+</div>
 
-  <!-- LEGENDA -->
-  <div class="legend">
-    <span style="background:#2563eb;color:white;">Fase A</span>
-    <span style="background:#16a34a;color:white;">Scienza delle Costruzioni</span>
-    <span style="background:#ea580c;color:white;">Tecnica delle Costruzioni</span>
-    <span style="background:#7c3aed;color:white;">Geotecnica</span>
-  </div>
+<!-- LEGENDA -->
+<div class="legend">
+  <span style="background:#2563eb;color:white;">Phase A</span>
+  <span style="background:#16a34a;color:white;">Mechanics of Solids and Structures</span>
+  <span style="background:#ea580c;color:white;">Structural Engineering</span>
+  <span style="background:#7c3aed;color:white;">Geotechnical Engineering</span>
+  <span style="background:#6b7280;color:white;">Seminars</span>
+</div>
 
-  <div id="calendar"></div>
+<div id="calendar"></div>
 </div>
 
 <!-- POPUP -->
 <div id="popup" class="popup">
-  <h3 id="popup-title"></h3>
-  <p id="popup-time"></p>
-  <p id="popup-location"></p>
-  <span class="popup-close" onclick="closePopup()">Close</span>
+  <h3 id="title"></h3>
+  <p id="time"></p>
+  <p id="location"></p>
+  <p id="lecturer"></p>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
- let currentFilter = 'all';
-
  const calendar = new FullCalendar.Calendar(
   document.getElementById('calendar'),
   {
     initialView: 'dayGridMonth',
-    height: 'auto',
 
     eventContent: function(arg) {
       return {
         html: `
-          <div style="white-space: normal;">
-            <strong>${arg.event.title}</strong><br>
-            <span style="font-size:0.75em;">⏰ ${arg.event.extendedProps.time}</span><br>
-            <span style="font-size:0.75em;">📍 ${arg.event.extendedProps.location}</span>
-          </div>
-        `
+        <div style="white-space: normal;">
+          <strong>${arg.event.title}</strong><br>
+          <span>⏰ ${arg.event.extendedProps.time}</span><br>
+          <span>📍 ${arg.event.extendedProps.location}</span>
+        </div>`
       };
     },
 
     eventClick: function(info) {
-      document.getElementById('popup-title').innerText = info.event.title;
-      document.getElementById('popup-time').innerText = "Time: " + info.event.extendedProps.time;
-      document.getElementById('popup-location').innerText = "Location: " + info.event.extendedProps.location;
+      document.getElementById('title').innerText = info.event.title;
+      document.getElementById('time').innerText = "Time: " + info.event.extendedProps.time;
+      document.getElementById('location').innerText = "Location: " + info.event.extendedProps.location;
+      document.getElementById('lecturer').innerText = "Lecturer: " + info.event.extendedProps.lecturer;
       document.getElementById('popup').style.display = 'block';
     },
 
     events: [
+
+      // Phase A
       {
         title: 'Scientific Computing and Python Programming',
         start: '2026-05-05T15:00:00',
@@ -160,46 +148,31 @@ document.addEventListener('DOMContentLoaded', function() {
         extendedProps: {
           time: '15:00–17:00',
           location: 'Room 329',
-          phase: 'A'
-        }
-      },
-      {
-        title: 'Scientific Computing and Python Programming',
-        start: '2026-05-07T16:00:00',
-        end: '2026-05-07T18:00:00',
-        color: '#2563eb',
-        extendedProps: {
-          time: '16:00–18:00',
-          location: 'Room 329',
-          phase: 'A'
+          lecturer: 'Alba Bisante',
+          group: 'A'
         }
       }
+
     ]
   }
 );
 
 calendar.render();
 
-window.filterEvents = function(phase) {
-  currentFilter = phase;
-
+window.filterEvents = function(group) {
   document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
   event.target.classList.add('active');
 
-  calendar.getEvents().forEach(event => {
-    if (phase === 'all' || event.extendedProps.phase === phase) {
-      event.setProp('display', 'auto');
+  calendar.getEvents().forEach(ev => {
+    if (group === 'all' || ev.extendedProps.group === group) {
+      ev.setProp('display', 'auto');
     } else {
-      event.setProp('display', 'none');
+      ev.setProp('display', 'none');
     }
   });
 }
 
 });
-
-function closePopup() {
-  document.getElementById('popup').style.display = 'none';
-}
 </script>
 
 </body>
