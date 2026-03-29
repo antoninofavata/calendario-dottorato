@@ -86,7 +86,7 @@ h2 {
   <button onclick="filterEvents('S')">Seminars</button>
 </div>
 
-<!-- LEGENDA CORRETTA -->
+
 <div class="legend">
   <span>🔵 Methodological tools</span>
   <span>🟢 Mechanics of Solids and Structures</span>
@@ -135,21 +135,43 @@ document.addEventListener('DOMContentLoaded', function() {
       { start:'2026-05-21T16:00:00', end:'2026-05-21T18:00:00' },
       { start:'2026-05-28T16:00:00', end:'2026-05-28T18:00:00' },
       { start:'2026-06-04T15:00:00', end:'2026-06-04T17:00:00' },
-      { start:'2026-06-16T15:00:00', end:'2026-06-16T17:00:00' }
+      { start:'2026-06-16T15:00:00', end:'2026-06-16T17:00:00' },
+      { start:'2026-05-13T15:00:00', end:'2026-05-13T17:00:00' },
+      { start:'2026-05-20T15:00:00', end:'2026-05-20T17:00:00' },
+      { start:'2026-05-27T15:00:00', end:'2026-05-27T17:00:00' }
 
-    ].map(e => ({
-        title: 'Scientific Computing and Python Programming',
-        ...e,
-        color: '#2563eb',
-        extendedProps: {
-          lecturer: 'Alba Bisante',
-          time: e.start.includes('T15') ? '15:00–17:00' : '16:00–18:00',
-          location: 'Room 329 SPV',
-          group: 'A'
-        }
-    }))
+  ].map(e => {
 
+  // Scientific Computing and Python Programming
+  if (e.start.includes('05-05') || e.start.includes('05-07') || e.start.includes('05-12')) {
+
+    return {
+      title: 'Scientific Computing and Python Programming',
+      ...e,
+      color: '#2563eb',
+      extendedProps: {
+        time: e.start.includes('T15') ? '15:00–17:00' : '16:00–18:00',
+        location: 'Room 329',
+        lecturer: 'Alba Bisante',
+        group: 'A'
+      }
+    };
   }
+
+  // Probability Theory and Statistics
+  return {
+    title: 'Probability Theory and Statistics',
+    ...e,
+    color: '#10b981',
+    extendedProps: {
+      time: '15:00–17:00',
+      location: 'Room 329 SPV',
+      lecturer: 'Claudio Durastanti',
+      group: 'A'
+    }
+  };
+
+})
 );
 
 calendar.render();
