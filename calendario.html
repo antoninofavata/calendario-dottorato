@@ -6,6 +6,12 @@
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
+<style>
+  .fc-event {
+    font-size: 0.8em;
+  }
+</style>
+
 </head>
 
 <body>
@@ -25,28 +31,119 @@ document.addEventListener('DOMContentLoaded', function() {
     height: 'auto',
 
     eventContent: function(arg) {
+
       let title = arg.event.title;
+      let time = arg.event.extendedProps.time || '';
+      let location = arg.event.extendedProps.location || '';
 
       return {
-        html: '<div style="white-space: normal; font-size: 0.85em; line-height: 1.2;">' +
-              title +
-              '</div>'
+        html: `
+          <div style="white-space: normal; line-height: 1.2;">
+            <strong>${title}</strong><br>
+            <span>${time}</span><br>
+            <span>${location}</span>
+          </div>
+        `
       };
     },
 
     events: [
-      { title: 'Scientific Computing and Python Programming', start: '2026-05-05T15:00:00', end: '2026-05-05T17:00:00' },
-      { title: 'Scientific Computing and Python Programming', start: '2026-05-12T15:00:00', end: '2026-05-12T17:00:00' },
-      { title: 'Scientific Computing and Python Programming', start: '2026-05-19T15:00:00', end: '2026-05-19T17:00:00' },
-      { title: 'Scientific Computing and Python Programming', start: '2026-05-26T15:00:00', end: '2026-05-26T17:00:00' },
 
-      { title: 'Scientific Computing and Python Programming', start: '2026-05-07T16:00:00', end: '2026-05-07T18:00:00' },
-      { title: 'Scientific Computing and Python Programming', start: '2026-05-14T16:00:00', end: '2026-05-14T18:00:00' },
-      { title: 'Scientific Computing and Python Programming', start: '2026-05-21T16:00:00', end: '2026-05-21T18:00:00' },
-      { title: 'Scientific Computing and Python Programming', start: '2026-05-28T16:00:00', end: '2026-05-28T18:00:00' },
+      // Scientific Computing and Python Programming
 
-      { title: 'Scientific Computing and Python Programming', start: '2026-06-04T15:00:00', end: '2026-06-04T17:00:00' },
-      { title: 'Scientific Computing and Python Programming', start: '2026-06-16T15:00:00', end: '2026-06-16T17:00:00' }
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-05-05T15:00:00',
+        end: '2026-05-05T17:00:00',
+        extendedProps: {
+          time: '15:00–17:00',
+          location: 'Room 329'
+        }
+      },
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-05-12T15:00:00',
+        end: '2026-05-12T17:00:00',
+        extendedProps: {
+          time: '15:00–17:00',
+          location: 'Room 329'
+        }
+      },
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-05-19T15:00:00',
+        end: '2026-05-19T17:00:00',
+        extendedProps: {
+          time: '15:00–17:00',
+          location: 'Room 329'
+        }
+      },
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-05-26T15:00:00',
+        end: '2026-05-26T17:00:00',
+        extendedProps: {
+          time: '15:00–17:00',
+          location: 'Room 329'
+        }
+      },
+
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-05-07T16:00:00',
+        end: '2026-05-07T18:00:00',
+        extendedProps: {
+          time: '16:00–18:00',
+          location: 'Room 329'
+        }
+      },
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-05-14T16:00:00',
+        end: '2026-05-14T18:00:00',
+        extendedProps: {
+          time: '16:00–18:00',
+          location: 'Room 329'
+        }
+      },
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-05-21T16:00:00',
+        end: '2026-05-21T18:00:00',
+        extendedProps: {
+          time: '16:00–18:00',
+          location: 'Room 329'
+        }
+      },
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-05-28T16:00:00',
+        end: '2026-05-28T18:00:00',
+        extendedProps: {
+          time: '16:00–18:00',
+          location: 'Room 329'
+        }
+      },
+
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-06-04T15:00:00',
+        end: '2026-06-04T17:00:00',
+        extendedProps: {
+          time: '15:00–17:00',
+          location: 'Room 329'
+        }
+      },
+      {
+        title: 'Scientific Computing and Python Programming',
+        start: '2026-06-16T15:00:00',
+        end: '2026-06-16T17:00:00',
+        extendedProps: {
+          time: '15:00–17:00',
+          location: 'Room 329'
+        }
+      }
+
     ]
   }
 );
